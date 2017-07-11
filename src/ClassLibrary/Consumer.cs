@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleApp
+namespace ClassLibrary
 {
     public class Consumer
     {

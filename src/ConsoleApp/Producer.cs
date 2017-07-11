@@ -1,4 +1,5 @@
 ﻿using System;
+using ClassLibrary;
 using Hangfire;
 
 namespace ConsoleApp

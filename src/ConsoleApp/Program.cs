@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Autofac;
+using ClassLibrary;
 using Hangfire;
 using Microsoft.Owin.Hosting;
 using IContainer = Autofac.IContainer;
@@ -19,7 +20,6 @@ namespace ConsoleApp
             var url = "http://localhost:9000";
 
             using (WebApp.Start<Startup>(url))
-            using (new BackgroundJobServer())
             {
                 var producer = container.Resolve<Producer>();
 
