@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
+using Autofac;
 using Hangfire;
 using Microsoft.Owin.Hosting;
+using IContainer = Autofac.IContainer;
 
 namespace ConsoleApp
 {
@@ -11,20 +13,32 @@ namespace ConsoleApp
             var connectionString = "Data Source=localhost;Initial Catalog=Hangfire.Sample;Integrated Security=True;";
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 
+            IContainer container = BuildContainer();
+            GlobalConfiguration.Configuration.UseAutofacActivator(container);
+
             var url = "http://localhost:9000";
 
             using (WebApp.Start<Startup>(url))
             using (new BackgroundJobServer())
             {
-                IBackgroundJobClient backgroundJobClient = new BackgroundJobClient();
-                var producer = new Producer();
+                var producer = container.Resolve<Producer>();
 
                 bool produceResult;
                 do
                 {
-                    produceResult = producer.Produce(backgroundJobClient);
+                    produceResult = producer.Produce();
                 } while (produceResult);
             }
+        }
+
+        static IContainer BuildContainer()
+        {
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>();
+            containerBuilder.RegisterType<Producer>();
+            containerBuilder.RegisterType<Consumer>();
+            IContainer container = containerBuilder.Build();
+            return container;
         }
     }
 }

@@ -5,7 +5,14 @@ namespace ConsoleApp
 {
     internal class Producer
     {
-        public bool Produce(IBackgroundJobClient backgroundJobClient)
+        readonly IBackgroundJobClient backgroundJobClient;
+
+        public Producer(IBackgroundJobClient backgroundJobClient)
+        {
+            this.backgroundJobClient = backgroundJobClient;
+        }
+
+        public bool Produce()
         {
             var line = Console.ReadLine();
 
