@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Hangfire;
 using Microsoft.Owin.Hosting;
 
@@ -13,19 +12,18 @@ namespace ConsoleApp
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 
             var url = "http://localhost:9000";
+
             using (WebApp.Start<Startup>(url))
             using (new BackgroundJobServer())
             {
                 IBackgroundJobClient backgroundJobClient = new BackgroundJobClient();
-                while (true)
+                var producer = new Producer();
+
+                bool produceResult;
+                do
                 {
-                    var line = Console.ReadLine();
-                    if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    {
-                        break;
-                    }
-                    backgroundJobClient.Enqueue(() => Console.WriteLine(line));
-                }
+                    produceResult = producer.Produce(backgroundJobClient);
+                } while (produceResult);
             }
         }
     }
