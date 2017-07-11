@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using Hangfire;
 
 namespace ConsoleApp
 {
@@ -6,14 +8,20 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            while (true)
+            var connectionString = "Data Source=localhost;Initial Catalog=Hangfire.Sample;Integrated Security=True;";
+            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+
+            using (new BackgroundJobServer())
             {
-                var line = Console.ReadLine();
-                if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                while (true)
                 {
-                    break;
+                    var line = Console.ReadLine();
+                    if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                    {
+                        break;
+                    }
+                    BackgroundJob.Enqueue(() => Console.WriteLine(line));
                 }
-                Console.WriteLine(line);
             }
         }
     }
