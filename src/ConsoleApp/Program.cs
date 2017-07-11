@@ -16,6 +16,7 @@ namespace ConsoleApp
             using (WebApp.Start<Startup>(url))
             using (new BackgroundJobServer())
             {
+                IBackgroundJobClient backgroundJobClient = new BackgroundJobClient();
                 while (true)
                 {
                     var line = Console.ReadLine();
@@ -23,7 +24,7 @@ namespace ConsoleApp
                     {
                         break;
                     }
-                    BackgroundJob.Enqueue(() => Console.WriteLine(line));
+                    backgroundJobClient.Enqueue(() => Console.WriteLine(line));
                 }
             }
         }
