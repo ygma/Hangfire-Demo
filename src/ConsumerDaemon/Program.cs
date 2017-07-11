@@ -1,4 +1,6 @@
 ﻿using System;
+using Autofac;
+using ClassLibrary;
 using Hangfire;
 
 namespace ConsumerDaemon
@@ -9,6 +11,12 @@ namespace ConsumerDaemon
         {
             var connectionString = "Data Source=localhost;Initial Catalog=Hangfire.Sample;Integrated Security=True;";
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule<ClassLibraryModule>();
+            IContainer container = containerBuilder.Build();
+
+            GlobalConfiguration.Configuration.UseAutofacActivator(container);
 
             var options = new BackgroundJobServerOptions
             {

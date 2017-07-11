@@ -34,9 +34,11 @@ namespace ConsoleApp
         static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
+
             containerBuilder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>();
             containerBuilder.RegisterType<Producer>();
-            containerBuilder.RegisterType<Consumer>();
+            containerBuilder.RegisterModule<ClassLibraryModule>();
+
             IContainer container = containerBuilder.Build();
             return container;
         }

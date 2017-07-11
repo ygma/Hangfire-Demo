@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
 using Microsoft.Owin;
 using Owin;
 
