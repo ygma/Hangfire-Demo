@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Hangfire;
+using Microsoft.Owin.Hosting;
 
 namespace ConsoleApp
 {
@@ -11,6 +12,8 @@ namespace ConsoleApp
             var connectionString = "Data Source=localhost;Initial Catalog=Hangfire.Sample;Integrated Security=True;";
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 
+            var url = "http://localhost:9000";
+            using (WebApp.Start<Startup>(url))
             using (new BackgroundJobServer())
             {
                 while (true)
