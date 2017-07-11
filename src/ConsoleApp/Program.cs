@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
@@ -10,6 +6,15 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            while (true)
+            {
+                var line = Console.ReadLine();
+                if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                {
+                    break;
+                }
+                Console.WriteLine(line);
+            }
         }
     }
 }
